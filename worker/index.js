@@ -5,6 +5,8 @@ export default {
     if (request.method === 'OPTIONS') {
       return new Response(null, {
         headers: {
+          // Note: Wildcard CORS is used intentionally as this is a public proxy
+          // For production use, consider implementing origin validation
           'Access-Control-Allow-Origin': '*',
           'Access-Control-Allow-Methods': 'POST, GET, OPTIONS',
           'Access-Control-Allow-Headers': 'Content-Type',
@@ -40,6 +42,19 @@ export default {
         });
       }
 
+      // Validate model format (alphanumeric, hyphens, underscores, and forward slashes only)
+      if (!/^[a-zA-Z0-9/_-]+$/.test(model)) {
+        return new Response(JSON.stringify({ 
+          error: 'Invalid model identifier format' 
+        }), {
+          status: 400,
+          headers: {
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Origin': '*',
+          },
+        });
+      }
+
       // Call Hugging Face API
       const apiUrl = `https://api-inference.huggingface.co/models/${model}`;
       
@@ -59,6 +74,21 @@ export default {
           }
         }),
       });
+
+      // Check if response is JSON before parsing
+      const contentType = response.headers.get('content-type');
+      if (!contentType || !contentType.includes('application/json')) {
+        const text = await response.text();
+        return new Response(JSON.stringify({ 
+          error: `API returned non-JSON response: ${text}` 
+        }), {
+          status: response.status,
+          headers: {
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Origin': '*',
+          },
+        });
+      }
 
       // Get the response data
       const data = await response.json();

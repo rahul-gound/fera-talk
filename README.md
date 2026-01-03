@@ -148,6 +148,25 @@ Hugging Face has rate limits on their free tier. If you hit limits:
 - Consider upgrading your Hugging Face account
 - Use a different model
 
+## Security Considerations
+
+### API Token Storage
+- API tokens are stored in browser localStorage
+- Never share your API tokens
+- Clear browser data to remove stored tokens
+
+### Cloudflare Worker
+- The default worker configuration uses wildcard CORS (`*`) for ease of use
+- For production deployments, consider:
+  - Restricting CORS to specific origins
+  - Implementing rate limiting
+  - Adding authentication/authorization
+  - Monitoring usage to prevent abuse
+
+### Model Validation
+- The worker validates model identifiers to prevent injection attacks
+- Only alphanumeric characters, hyphens, underscores, and forward slashes are allowed
+
 ## Contributing
 
 Contributions are welcome! Feel free to:

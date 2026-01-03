@@ -8,9 +8,6 @@ const chatMessages = document.getElementById('chatMessages');
 const messageInput = document.getElementById('messageInput');
 const sendBtn = document.getElementById('sendBtn');
 
-// Conversation history
-let conversationHistory = [];
-
 // Load saved settings from localStorage
 function loadSettings() {
     const savedApiKey = localStorage.getItem('hf_api_key');
@@ -19,9 +16,18 @@ function loadSettings() {
     
     if (savedApiKey) apiKeyInput.value = savedApiKey;
     if (savedModel) {
-        if (modelSelect.querySelector(`option[value="${savedModel}"]`)) {
-            modelSelect.value = savedModel;
-        } else {
+        // Check if the saved model is in the dropdown options
+        let modelFound = false;
+        for (let i = 0; i < modelSelect.options.length; i++) {
+            if (modelSelect.options[i].value === savedModel) {
+                modelSelect.value = savedModel;
+                modelFound = true;
+                break;
+            }
+        }
+        
+        // If not found in dropdown, it's a custom model
+        if (!modelFound) {
             modelSelect.value = 'custom';
             customModelInput.value = savedModel;
             customModelGroup.style.display = 'block';
@@ -181,7 +187,6 @@ async function sendMessage() {
     
     // Add user message
     addMessage(message, 'user');
-    conversationHistory.push({ role: 'user', content: message });
     
     // Clear input
     messageInput.value = '';
@@ -209,7 +214,6 @@ async function sendMessage() {
         
         // Add assistant message
         addMessage(responseText, 'assistant');
-        conversationHistory.push({ role: 'assistant', content: responseText });
         
     } catch (error) {
         removeTypingIndicator();
