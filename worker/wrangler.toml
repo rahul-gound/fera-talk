@@ -1,0 +1,19 @@
+name = "fera-talk-worker"
+main = "index.js"
+compatibility_date = "2025-01-01"
+
+# Worker configuration
+# Update the account_id with your Cloudflare account ID
+# account_id = "your-account-id-here"
+
+# Routes configuration (optional)
+# routes = [
+#   { pattern = "talk.yourdomain.com/*", zone_name = "yourdomain.com" }
+# ]
+
+# Workers dev configuration
+[env.production]
+name = "fera-talk-worker"
+
+[env.development]
+name = "fera-talk-worker-dev"

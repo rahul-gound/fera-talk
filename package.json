@@ -1,0 +1,24 @@
+{
+  "name": "fera-talk",
+  "version": "1.0.0",
+  "description": "Chat with Hugging Face AI models via web interface with CORS-free API access",
+  "main": "index.html",
+  "scripts": {
+    "dev": "npx wrangler dev worker/index.js",
+    "deploy": "npx wrangler deploy worker/index.js",
+    "serve": "npx http-server . -p 8080 -o"
+  },
+  "keywords": [
+    "huggingface",
+    "ai",
+    "chat",
+    "cloudflare-workers",
+    "llm"
+  ],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "http-server": "^14.1.1",
+    "wrangler": "^3.78.0"
+  }
+}
