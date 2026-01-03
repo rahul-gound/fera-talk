@@ -50,6 +50,12 @@ A web-based chat interface to interact with Hugging Face AI models. Features COR
    ```
    
    After deployment, you'll get a worker URL like: `https://fera-talk-worker.your-subdomain.workers.dev`
+   
+   **⚠️ Security Note:** The default worker uses wildcard CORS (`*`) to allow access from any origin. This is convenient for development and personal use, but for production deployments, you should:
+   - Restrict CORS to specific domains
+   - Implement rate limiting to prevent abuse
+   - Consider adding authentication
+   - Monitor worker usage through Cloudflare Analytics
 
 3. **Run the Web Interface**
    ```bash

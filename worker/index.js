@@ -42,8 +42,8 @@ export default {
         });
       }
 
-      // Validate model format (alphanumeric, hyphens, underscores, and forward slashes only)
-      if (!/^[a-zA-Z0-9/_-]+$/.test(model)) {
+      // Validate model format (alphanumeric, hyphens, underscores, periods, and forward slashes only)
+      if (!/^[a-zA-Z0-9/._-]+$/.test(model)) {
         return new Response(JSON.stringify({ 
           error: 'Invalid model identifier format' 
         }), {

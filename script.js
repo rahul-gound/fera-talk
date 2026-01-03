@@ -218,7 +218,23 @@ async function sendMessage() {
     } catch (error) {
         removeTypingIndicator();
         console.error('Error:', error);
-        addMessage(`Error: ${error.message}`, 'error');
+        
+        // Sanitize error message for display
+        let userMessage = 'An error occurred while communicating with the AI model.';
+        
+        if (error.message.includes('Please enter your Hugging Face API token')) {
+            userMessage = 'Error: Please enter your Hugging Face API token';
+        } else if (error.message.includes('Please select or enter a model')) {
+            userMessage = 'Error: Please select or enter a model';
+        } else if (error.message.includes('CORS') || error.message.includes('Failed to fetch')) {
+            userMessage = 'Error: Network error. Please check your internet connection or use the Cloudflare Worker.';
+        } else if (error.message.includes('Worker error')) {
+            userMessage = 'Error: Unable to reach the Cloudflare Worker. Please check the Worker URL.';
+        } else if (error.message.includes('API error')) {
+            userMessage = 'Error: The AI model returned an error. Please try a different model or check your API token.';
+        }
+        
+        addMessage(userMessage, 'error');
         
         // Show helpful message about CORS
         if (error.message.includes('CORS') || error.message.includes('Failed to fetch')) {
